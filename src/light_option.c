@@ -21,10 +21,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <stdlib.h>
 #include "light_pcapng.h"
 
 #include "light_debug.h"
 #include "light_internal.h"
+
+uint16_t *light_get_num_options(const light_pcapng pcapng, uint16_t *num_options)
+{
+	if (pcapng == NULL) {
+		return 0;
+	}
+
+	int local_num_options = 0;
+	uint16_t *option_codes = NULL;
+
+	light_option iterator = pcapng->options;
+
+	while (iterator != NULL) {
+		if (iterator->custom_option_code > 0)
+			 local_num_options++;
+		iterator = iterator->next_option;
+	}
+
+	if (local_num_options > 0) {
+		int option_index = 0;
+		option_codes = (uint16_t *)calloc(local_num_options, sizeof(uint16_t));
+	        iterator = pcapng->options;
+
+	        while (iterator != NULL) {
+			if (iterator->custom_option_code > 0) {
+				option_codes[option_index] = iterator->custom_option_code;
+				option_index++;
+			}
+			iterator = iterator->next_option;
+		}
+	}
+	else
+		option_codes = NULL;
+
+	*num_options = local_num_options;
+
+	return option_codes;
+}
+
 
 light_option light_get_option(const light_pcapng pcapng, uint16_t option_code)
 {

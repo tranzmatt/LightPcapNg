@@ -27,6 +27,7 @@
 #include "light_debug.h"
 #include "light_util.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -60,7 +61,7 @@ static light_pcapng_file_info *__create_file_info(light_pcapng pcapng_head)
 	light_get_block_info(iter, LIGHT_INFO_BODY, &section_header, NULL);
 	file_info->major_version = section_header->major_version;
 	file_info->minor_version = section_header->minor_version;
-
+	
 	light_option opt = light_get_option(iter, LIGHT_OPTION_SHB_HARDWARE);
 	if (opt != NULL)
 	{
@@ -414,6 +415,25 @@ int light_get_next_packet(light_pcapng_t *pcapng, light_packet_header *packet_he
 
 	packet_header->comment = NULL;
 	packet_header->comment_length = 0;
+
+	uint16_t num_options = 0, *option_list = NULL;
+	option_list = light_get_num_options(pcapng->pcapng_iter, &num_options);
+
+	/**
+	if (num_options > 0) {
+		for (int i = 0; i < num_options; i++) {
+		    fprintf(stderr,"Found Option %d\n", option_list[i]);
+		}
+	}
+	**/
+
+	light_option custom_option = light_get_option(pcapng->pcapng_iter, LIGHT_OPTION_CUSTOM_BINARY_SAFE); // get custom bytes
+	if (custom_option != NULL)
+	{
+		packet_header->custom_bytes_length = light_get_option_length(custom_option);
+		packet_header->custom_bytes = (char*)light_get_option_data(custom_option);
+		fprintf(stderr,"Found CUSTOM_BYTES len %d\n",packet_header->custom_bytes_length);
+	}
 
 	light_option option = light_get_option(pcapng->pcapng_iter, 1); // get comment
 	if (option != NULL)

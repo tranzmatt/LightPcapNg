@@ -47,6 +47,11 @@ extern "C" {
 #define LIGHT_OPTION_SHB_USERAPPL          0x0004
 #define LIGHT_OPTION_IF_TSRESOL            0x0009
 
+#define LIGHT_OPTION_CUSTOM_STRING_SAFE   2988
+#define LIGHT_OPTION_CUSTOM_BINARY_SAFE   2989
+#define LIGHT_OPTION_CUSTOM_STRING       19372
+#define LIGHT_OPTION_CUSTOM_BINARY       19373
+
 // Custom option codes
 #define LIGHT_CUSTOM_OPTION_ADDRESS_INFO   0xADD4
 #define LIGHT_CUSTOM_OPTION_FEATURE_U64    0x0064
@@ -95,6 +100,7 @@ size_t light_get_size(const light_pcapng pcapng);
 void light_pcapng_historgram(const light_pcapng pcapng, uint32_t (*key_master)(const light_pcapng),
 		light_pair **hist, size_t *size, size_t *rejected);
 int light_get_block_info(const light_pcapng pcapng, light_info info_flag, void *info_data, size_t *data_size);
+uint16_t *light_get_num_options(const light_pcapng pcapng, uint16_t *num_options);
 light_option light_get_option(const light_pcapng pcapng, uint16_t option_code);
 uint16_t light_get_option_code(const light_option option);
 const light_option light_get_next_option(const light_option option);

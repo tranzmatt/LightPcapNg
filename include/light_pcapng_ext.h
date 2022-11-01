@@ -55,6 +55,8 @@ typedef struct _light_packet_header {
 	uint16_t data_link;
 	char* comment;
 	uint16_t comment_length;
+	char* custom_bytes;
+	uint16_t custom_bytes_length;
 } light_packet_header;
 
 typedef struct _light_pcapng_file_info {
@@ -68,6 +70,8 @@ typedef struct _light_pcapng_file_info {
 	size_t os_desc_size;
 	char *user_app_desc;
 	size_t user_app_desc_size;
+	char *file_option;
+	size_t file_option_size;
 	size_t interface_block_count;
 	uint16_t link_types[MAX_SUPPORTED_INTERFACE_BLOCKS];
 	double timestamp_resolution[MAX_SUPPORTED_INTERFACE_BLOCKS];
