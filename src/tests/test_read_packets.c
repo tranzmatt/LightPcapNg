@@ -64,16 +64,30 @@ int main(int argc, const char **args) {
 							pkt_header.data_link,
 							(int)pkt_header.timestamp.tv_sec,
 							(int)pkt_header.timestamp.tv_usec);
-					if (pkt_header.comment_length > 0)
+					if (pkt_header.comment_length > 0) {
 						printf(", comment=\"%s\"\n", pkt_header.comment);
-					else
+					}
+					else {
 						printf("\n");
+					}
+
+					if (pkt_header.custom_bytes_length > 0) {
+						printf("custom bytes %d = ", pkt_header.custom_bytes_length);
+						for (int i=0 ; i < pkt_header.custom_bytes_length; i++)
+						{
+							printf("%02x ", (uint8_t)pkt_header.custom_bytes[i]);
+						}
+						printf("\n");
+					}
+					else {
+						printf("\n");
+					}
 
 					index++;
 				}
 			}
 
-			printf("interface count in file: %d\n", info->interface_block_count);
+			printf("interface count in file: %lu\n", info->interface_block_count);
 
 			light_pcapng_close(pcapng);
 		}
