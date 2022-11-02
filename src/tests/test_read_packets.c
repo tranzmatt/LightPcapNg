@@ -71,16 +71,23 @@ int main(int argc, const char **args) {
 						printf("\n");
 					}
 
-					if (pkt_header.custom_bytes_length > 0) {
-						printf("custom bytes %d = ", pkt_header.custom_bytes_length);
-						for (int i=0 ; i < pkt_header.custom_bytes_length; i++)
-						{
-							printf("%02x ", (uint8_t)pkt_header.custom_bytes[i]);
+					
+					int num_options = pkt_header.num_custom_fields;
+
+					if (num_options > 0) {
+						for (int option = 0; option < num_options; option++) {
+							if (pkt_header.custom_field_length[option] > 0) {
+								printf("custom field %d = ", pkt_header.custom_field_length[option]);
+								for (int i=0 ; i < pkt_header.custom_field_length[option]; i++)
+								{
+									printf("%02x ", (uint8_t)pkt_header.custom_field_payload[option][i]);
+								}
+								printf("\n");
+							}
+							else {
+								printf("\n");
+							}
 						}
-						printf("\n");
-					}
-					else {
-						printf("\n");
 					}
 
 					index++;

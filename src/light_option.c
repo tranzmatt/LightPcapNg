@@ -38,8 +38,9 @@ uint16_t *light_get_num_options(const light_pcapng pcapng, uint16_t *num_options
 
 	light_option iterator = pcapng->options;
 
+	// We don't care about comments
 	while (iterator != NULL) {
-		if (iterator->custom_option_code > 0)
+		if (iterator->custom_option_code > 1)
 			 local_num_options++;
 		iterator = iterator->next_option;
 	}

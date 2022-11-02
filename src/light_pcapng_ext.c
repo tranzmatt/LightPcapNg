@@ -416,31 +416,39 @@ int light_get_next_packet(light_pcapng_t *pcapng, light_packet_header *packet_he
 	packet_header->comment = NULL;
 	packet_header->comment_length = 0;
 
-	uint16_t num_options = 0, *option_list = NULL;
-	option_list = light_get_num_options(pcapng->pcapng_iter, &num_options);
-
-	/**
-	if (num_options > 0) {
-		for (int i = 0; i < num_options; i++) {
-		    fprintf(stderr,"Found Option %d\n", option_list[i]);
-		}
-	}
-	**/
-
-	light_option custom_option = light_get_option(pcapng->pcapng_iter, LIGHT_OPTION_CUSTOM_BINARY_SAFE); // get custom bytes
-	if (custom_option != NULL)
-	{
-		packet_header->custom_bytes_length = light_get_option_length(custom_option);
-		packet_header->custom_bytes = (char*)light_get_option_data(custom_option);
-		fprintf(stderr,"Found CUSTOM_BYTES len %d\n",packet_header->custom_bytes_length);
-	}
-
 	light_option option = light_get_option(pcapng->pcapng_iter, 1); // get comment
 	if (option != NULL)
 	{
 		packet_header->comment_length = light_get_option_length(option);
 		packet_header->comment = (char*)light_get_option_data(option);
 	}
+
+	uint16_t num_options = 0, *option_list = NULL;
+	option_list = light_get_num_options(pcapng->pcapng_iter, &num_options);
+
+	packet_header->num_custom_fields = num_options;
+
+	if (num_options > 0) {
+
+		packet_header->custom_field_type = calloc(num_options, sizeof(uint16_t));
+       		packet_header->custom_field_length = calloc(num_options, sizeof(uint16_t));
+        	packet_header->custom_field_payload = calloc(num_options, sizeof(uint8_t*));
+
+		
+		for (int i = 0; i < num_options; i++) {
+			fprintf(stderr,"Found Option %d\n", option_list[i]);
+			packet_header->custom_field_type = option_list[i];
+
+			light_option custom_option = light_get_option(pcapng->pcapng_iter, option_list[i]); // get custom bytes
+			if (custom_option != NULL)
+			{
+				packet_header->custom_field_length[i] = light_get_option_length(custom_option);
+				packet_header->custom_field_payload[i] = (uint8_t*)light_get_option_data(custom_option);
+				fprintf(stderr,"Found CUSTOM_FIELD len %d\n",packet_header->custom_field_length[i]);
+			}
+		}
+	}
+
 
 	pcapng->pcapng_iter = light_next_block(pcapng->pcapng_iter);
 

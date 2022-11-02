@@ -55,8 +55,11 @@ typedef struct _light_packet_header {
 	uint16_t data_link;
 	char* comment;
 	uint16_t comment_length;
-	char* custom_bytes;
-	uint16_t custom_bytes_length;
+	// could have multiple custom fields
+	uint16_t num_custom_fields;
+	uint16_t* custom_field_type; // defines payload type 2988/2989/
+	uint16_t* custom_field_length; // length of custom
+	uint8_t** custom_field_payload; // custom payload
 } light_packet_header;
 
 typedef struct _light_pcapng_file_info {
