@@ -9,7 +9,7 @@ PRECOMPILED = $(HEADERS:.h=.gch)
 
 TESTS = tests/test_read.c tests/test_read_write.c tests/test_mem.c tests/test_histogram.c tests/test_subcapture.c \
 	tests/test_feature.c tests/test_flow.c tests/test_feature_advanced.c tests/test_read_packets.c tests/test_read_write_packets.c \
-	tests/test_split.c
+	tests/test_read_packets_print_gps.c tests/test_split.c
 
 TESTE = $(TESTS:.c=.test)
 

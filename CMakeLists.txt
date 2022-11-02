@@ -73,6 +73,11 @@ add_executable (test_read_packets.test
     )
 target_link_libraries(test_read_packets.test light_pcapng_static)
 
+add_executable (test_read_packets_print_gps.test
+    src/tests/test_read_packets_print_gps.c
+    )
+target_link_libraries(test_read_packets_print_gps.test light_pcapng_static)
+
 add_executable (test_read_write_packets.test
     src/tests/test_read_write_packets.c
     )
