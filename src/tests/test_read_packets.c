@@ -77,7 +77,8 @@ int main(int argc, const char **args) {
 					if (num_options > 0) {
 						for (int option = 0; option < num_options; option++) {
 							if (pkt_header.custom_field_length[option] > 0) {
-								printf("custom field %d = ", pkt_header.custom_field_length[option]);
+								printf("custom field type %d len %d = ", pkt_header.custom_field_type[option],
+										pkt_header.custom_field_length[option]);
 								for (int i=0 ; i < pkt_header.custom_field_length[option]; i++)
 								{
 									printf("%02x ", (uint8_t)pkt_header.custom_field_payload[option][i]);
